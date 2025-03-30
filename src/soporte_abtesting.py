@@ -7,6 +7,8 @@ import numpy as np
 # -----------------------------------------------------------------------
 from scipy import stats
 from statsmodels.stats.proportion import proportions_ztest # para hacer el ztest
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def info_df(dataframe):
     """
@@ -58,6 +60,48 @@ def estadisticos_numericas_df(dataframe):
 
     return estadísticos_generales
 
+def distribucion_tiemponavegacion_nvisitas(dataframe, grupo = "all"):
+    fig, axes = plt.subplots(nrows = 1, ncols = 2, figsize = (20, 5))
+    
+    if grupo == "all":
+        sns.histplot(x = "Time Spent", 
+                    data = dataframe, 
+                    ax = axes[0])
+
+        sns.histplot(x = "Page Views", 
+                    data = dataframe, 
+                    ax = axes[1])
+    elif grupo == "A":
+        sns.histplot(x = "Time Spent", 
+             data = dataframe[dataframe["Group"] == "A"], 
+            ax = axes[0])
+
+        sns.histplot(x = "Page Views", 
+             data = dataframe[dataframe["Group"] == "A"], 
+            ax = axes[1])
+        
+    elif grupo == "B":
+        sns.histplot(x = "Time Spent", 
+            data = dataframe[dataframe["Group"] == "B"], 
+            ax = axes[0])
+
+        sns.histplot(x = "Page Views", 
+             data = dataframe[dataframe["Group"] == "B"], 
+            ax = axes[1])
+    else:
+        return "El grupo introducido no es correcto. Vuelve a intentarlo."
+
+    axes[0].set_title("Distribución tiempo en web")
+    axes[0].set_ylabel("Nº usuarios")
+    axes[0].spines['right'].set_visible(False)
+    axes[0].spines['top'].set_visible(False)
+
+    axes[1].set_title("Distribución del número de visitas")
+    axes[1].set_ylabel("Nº de usuarios")
+    axes[1].spines['right'].set_visible(False)
+    axes[1].spines['top'].set_visible(False)
+
+    plt.show()
 
 def exploracion_dataframe(dataframe, columna_control):
     """
